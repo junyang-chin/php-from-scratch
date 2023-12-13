@@ -2,6 +2,6 @@
 
 namespace App\Core\Http;
 
-class Kernel implements HttpHandler
+interface HttpHandler
 {
 }
