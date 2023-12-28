@@ -10,11 +10,7 @@ $app = app();
  * This is where you register all your bindings into the container
  * 
  */
-$app->bind(Kernel::class, function (Container $app) {
-    $app->bind('foo', function () {
-        return 'bar';
-    });
-
+$app->singleton(Kernel::class, function () {
     return new Kernel();
 });
 
