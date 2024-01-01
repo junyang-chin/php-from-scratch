@@ -2,6 +2,8 @@
 A web framework built from scratch in PHP.
 This repository serves as a documentation of my learning process in application development using object-oriented programming
 
+## Docs
+1. [Part 1: Dependency Injection - The Service Container](docs/part_1.md)
 ## Development
 ### via Docker Compose
 ```
