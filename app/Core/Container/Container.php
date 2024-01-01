@@ -5,6 +5,8 @@ namespace App\Core\Container;
 use App\Core\Container\Exceptions\BindingNotFoundException;
 use Closure;
 use Psr\Container\ContainerInterface as PsrContainer;
+use ReflectionClass;
+use ReflectionNamedType;
 
 class Container implements PsrContainer
 {
@@ -14,11 +16,56 @@ class Container implements PsrContainer
 
     public function get(string $id)
     {
-        if (!isset($this->bindings[$id])) {
-            throw BindingNotFoundException::make($id);
+        if (isset($this->bindings[$id])) {
+
+            return $this->bindings[$id];
         }
 
-        return $this->bindings[$id];
+        if (! class_exists($id)) {
+            throw UnknownDependencyException::make($id);
+        }
+
+        $reflector = new ReflectionClass($id);
+        $constructor = $reflector->getConstructor();
+
+        if (is_null($constructor)) {
+            $this->bind(
+                $id,
+                function () use ($id) {
+                    return new $id();
+                },
+                false
+            );
+
+            return $this->get($id);
+        }
+
+        $parameters = $constructor->getParameters();
+
+        $dependencies = [];
+        foreach ($parameters as $parameter) {
+            $type = $parameter->getType();
+
+            if (is_null($type)) {
+                throw BindingNotFoundException::make($id);
+            }
+
+            if (! $type instanceof ReflectionNamedType) {
+                throw BindingNotFoundException::make($id);
+            }
+
+            $dependencies[] = $this->resolve($type->getName(), []);
+        }
+
+        $this->bind(
+            $id,
+            function () use ($id, $dependencies) {
+                return new $id(...$dependencies);
+            },
+            false
+        );
+
+        return $this->get($id);
     }
 
     public function has(string $id): bool
@@ -40,15 +87,15 @@ class Container implements PsrContainer
     {
         $concrete = $this->get($abstract)['concrete'];
 
-        if (!$concrete instanceof Closure) {
+        if (! $concrete instanceof Closure) {
             return $concrete;
         }
 
-        if (!$this->shouldCache($abstract)) {
+        if (! $this->shouldCache($abstract)) {
             return $this->instantiate($concrete, $params);
         }
 
-        if (!$this->hasCache($abstract)) {
+        if (! $this->hasCache($abstract)) {
             $this->singletons[$abstract] = $this->instantiate($concrete, $params);
         }
 
