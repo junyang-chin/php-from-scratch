@@ -9,6 +9,8 @@
         "friendsofphp/php-cs-fixer": "^3.45"
     },
     "require": {
-        "psr/container": "^2.0"
+        "psr/container": "^2.0",
+        "nyholm/psr7-server": "^1.1",
+        "nyholm/psr7": "^1.8"
     }
 }
