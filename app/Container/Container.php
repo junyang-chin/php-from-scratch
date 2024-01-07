@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Container;
+namespace App\Container;
 
 use App\Core\Container\Exceptions\BindingNotFoundException;
 use Closure;
@@ -17,10 +17,14 @@ class Container implements PsrContainer
     public function get(string $id)
     {
         if (isset($this->bindings[$id])) {
-
             return $this->bindings[$id];
         }
 
+        $this->autowire($id);
+    }
+
+    protected function autowire(string $id)
+    {
         if (! class_exists($id)) {
             throw UnknownDependencyException::make($id);
         }

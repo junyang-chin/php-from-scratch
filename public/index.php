@@ -7,10 +7,10 @@ require __DIR__. '/../utils/helpers.php';
 
 /**
  *
- * Start the bootstrapping process. Obtain the service container
+ * Start the bootstrapping process. Get the service container
  *
  */
 $app = require __DIR__. '/../bootstrap/app.php';
 
 
-$kernel = $app->resolve(\App\Core\Http\Kernel::class);
+$kernel = $app->resolve(\App\Http\Kernel::class);

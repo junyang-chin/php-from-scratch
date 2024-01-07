@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Container;
+namespace App\Container;
 
 use Exception;
 
