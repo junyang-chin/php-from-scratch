@@ -45,4 +45,4 @@ $bar = $app->resolve('foo');
 get_class($bar); // "App\Bar"
 ```
 ### Auto wiring
-Autowiring is a container feature that could recusrively attempt to resolve the dependencies even though they aren't explicitly defined using the methods above. However, it should be noted that classes with no dependencies or with conrete dependencies can be resolved.
+Autowiring is a container feature that could recusrively attempt to resolve the dependencies even though they aren't explicitly defined using the methods above. However, it should be noted that classes with no dependencies or with concrete dependencies can be resolved.
