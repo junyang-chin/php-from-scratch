@@ -4,7 +4,7 @@ namespace App\Http;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class Kernel implements HttpHandler
+class Kernel 
 {
     public function __construct(protected Request $request)
     {

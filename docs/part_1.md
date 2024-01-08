@@ -12,17 +12,17 @@ There is a helpful global function `app()` which returns only a single instances
 ```php
 $app = app();
 
-$app instanceof \App\Container; // true
+get_class($app) // App\Container\Container
 ```
 You should not attempt to manually attempt to resolve multiple instance of containers as there should only be a single source of truth for your entire application.
 
 ### The `bind` method
 
-The first argument of is where you define a unique identifier. The second argument accepts either a simple string or a `Closure`. The closure receives an instance of `\App\Container` that you for your convenience. It is up to you whether to use it or not
+The first argument of is where you define a unique identifier. The second argument accepts either a simple string or a `Closure`. The closure receives an instance of `App\Container` that you for your convenience. It is up to you whether to use it or not
 
 ```php
-$object = $app->bind('foo', function (\App\Container\Container $app)
-   return new \App\Bar(); 
+$object = $app->bind('foo', function (App\Container\Container $app)
+   return new App\Bar(); 
 );
 ```
 
@@ -31,7 +31,7 @@ The singleton methodd works just like `bind`. The only difference is for the ent
 
 ```php
 $object = $app->singleton('foo', function (\App\Container\Container $app)
-    return new \App\Bar();
+    return new App\Bar();
 );
 ```
 
@@ -42,7 +42,7 @@ $app = app();
 
 $bar = $app->resolve('foo'); 
 
-$bar instanceof \App\Bar::class; // true
+get_class($bar); // "App\Bar"
 ```
 ### Auto wiring
 Autowiring is a container feature that could recusrively attempt to resolve the dependencies even though they aren't explicitly defined using the methods above. However, it should be noted that classes with no dependencies or with conrete dependencies can be resolved.
